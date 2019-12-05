@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>分页控件测试</title>
+    <link href="../../dist/sdpagination.min.css" rel="stylesheet" />
+</head>
+<body>
+<form id="searchForm">
+    <!-- 这个form里通常是放查询用的条件，这里用来存储PageSize(如果为固定值，则没必要用它)和PageIndex -->
+    <input type="text" name="PageSize" id="PageSize" value="10" />
+    <input type="text" name="PageIndex" id="PageIndex" value="1" />
+</form>
+<br />
+<h4>最简洁，传入基本参数，其他都使用默认参数</h4>
+<div id="PagerContainer1"></div>
+<br />
+<h4>传入基本参数，启用PageSize下拉框及其回调，其他都使用默认参数</h4>
+<div id="PagerContainer2"></div>
+<br />
+<h4>设置前一页、下一页、首页、末页按钮的字符、当前页前后按钮数、信息显示的模板、设置PageSize下拉框里的可选项</h4>
+<div id="PagerContainer3"></div>
+<br />
+<h4>设置样式 Large</h4>
+<div id="PagerContainer4"></div>
+<br />
+<h4>设置样式 small</h4>
+<div id="PagerContainer5"></div>
+<br />
+<h4>显示首页、末页、上一页、下一页、快速跳转输入框</h4>
+<div id="PagerContainer7"></div>
+<br />
+<h4>加载皮肤</h4>
+<div id="PagerContainer8"></div>
+<div id="PagerContainer9"></div>
+<div id="PagerContainer10"></div>
+<div id="PagerContainer11"></div>
+<br />
+<!-- jQuery (necessary for Bootstrap's JavaScript plugins) -->
+<script src="http://apps.bdimg.com/libs/jquery/1.11.3/jquery.js" ></script>
+<script src="../../dist/jquery-sdpagination.min.js"></script>
+<script src="../../dist/fenye.js"></script>
+
+</body>
+</html>

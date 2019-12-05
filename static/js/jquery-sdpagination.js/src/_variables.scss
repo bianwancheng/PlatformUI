@@ -1,0 +1,23 @@
+@charset "utf-8";
+//默认皮肤
+//高度
+$large-height:44px;
+$default-height:30px;
+$small-height:26px;
+//正常链接颜色
+$a-hover-color: #0d7dae;
+$hover-bg-color: #f5f5f5;
+//当前链接颜色
+$a-active-color:#999;
+$active-bg-color:#f5f5f5;
+//不可用链接颜色
+$a-disabled-color:#999;
+$disabled-bg-color:#f5f5f5;
+//普通字颜色
+$color: #333;
+//字体大小
+$font-size-base:          14px !default;
+$font-size-large:         ceil(($font-size-base * 1.25)) !default; // ~18px
+$font-size-small:         ceil(($font-size-base * 0.85)) !default; // ~12px
+//边框
+$border:1px solid #ddd;

@@ -1,0 +1,57 @@
+@mixin pagination-size($height,$padding-vertical, $padding-horizontal,$font-size,$radius){
+  & ul{
+    height: $height;
+    >li{
+      >a{
+        padding: $padding-vertical $padding-horizontal;
+        font-size: $font-size;
+      }
+      &:first-child>a{
+        @include border-left-radius($radius);
+      }
+      &:last-child>a{
+        @include border-right-radius($radius);
+      }
+    }
+  }
+}
+@mixin info-size($height,$font-size,$line-height){
+  font-size:$font-size;
+  height:$height;
+  line-height:$line-height;
+}
+@mixin input-size($width,$height,$margin-top,$font-size,$line-height){
+  font-size: $font-size;
+  width: $width;
+  height: $height;
+  margin-top:$margin-top;
+  line-height: $line-height;
+}
+@mixin skin($skin-name,$a-hover-color,$hover-bg-color,$a-active-color,$active-bg-color){
+  .sdpagination-#{$skin-name} {
+    ul{
+      >.active{
+        >a,a:hover,a:focus{
+          background-color:$active-bg-color;
+          color:$a-active-color;
+        }
+      }
+      >li{
+        >a{
+          color:$a-hover-color;
+          &:hover,&:focus{
+            background-color:$hover-bg-color;
+          }
+        }
+      }
+    }
+  }
+  .sdpagination-#{$skin-name}  span {
+    &.focus{
+      border-color:$a-hover-color;
+    }
+  }
+  .sdpagination-#{$skin-name}  input{
+    color:$a-hover-color;
+  }
+}

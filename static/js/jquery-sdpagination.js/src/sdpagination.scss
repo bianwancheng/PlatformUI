@@ -1,0 +1,150 @@
+@charset "utf-8";
+/*
+Copyright (C) Corporation. All rights reserved.
+Author      :  lihaitao
+Email        : lhtzbj12@126.com
+Create Date  : 2017-02-09
+Description  : 分页导航插件
+Version      : V2.0
+Revision History:
+     Date         Author               Description
+     2017-02-09   lihaitao              改成scss,增加蓝色、绿色、橙色、红色皮肤
+     2016-12-25   lihaitao               create
+*/
+@import "variables";
+@import "mixins/border-radius";
+@import "mixins/vendor-prefixes";
+@import "mixins/sdpagination";
+.sdpagination *{
+  margin: 0;
+  padding:0;
+}
+.sdpagination {
+  ul{
+    display:inline-block;
+    *display:inline;
+    @include border-radius(4px);
+    *zoom:1;
+    @include box-shadow(0 1px 2px rgba(0,0,0,0.05));
+    height: $default-height;
+    float:right;
+    >.active{
+      >a,a:hover,a:focus{
+        background-color:$active-bg-color;
+        color:$a-active-color;
+        cursor:default;
+      }
+    }
+    >.disabled{
+      >a,>a:hover,>a:focus{
+        color:$a-disabled-color;
+        cursor:default;
+        background-color:transparent;
+      }
+    }
+    >li{
+      display:inline;
+      >a{
+        float:left;
+        text-align: center;
+        padding:4px 12px;
+        line-height:20px;
+        text-decoration:none;
+        background-color:#fff;
+        border: $border;
+        border-right-width:0;
+        font-size:$font-size-base;
+        color:$a-hover-color;
+        &:hover,&:focus{
+          background-color:$hover-bg-color;
+        }
+      }
+      &:first-child>a{
+        @include border-left-radius(4px);
+      }
+      &:last-child>a{
+        @include border-right-radius(4px);
+      }
+    }
+  }
+}
+/* 前面信息显示的样式*/
+.sdpagination .info {
+  font-size:$font-size-base;
+  display:inline-block;
+  height:$default-height;
+  line-height: $default-height;
+  color:$color;
+  float:left;
+  .pageSize{
+    width:70px;
+    text-align:left;
+    font-size:inherit;
+    height:($default-height)-6;
+    color:inherit;
+  }
+}
+/* 后页的input box */
+.sdpagination span {
+  float:left;
+  padding:0;
+  border:$border;
+  height:28px;
+  @include border-right-radius(4px);
+  &.focus{
+    border-left: $border;
+    border-color:$a-hover-color;
+  }
+}
+#pagejump{
+  width:50px;
+  text-align: center;
+  color:$a-hover-color;
+  border:none;
+  margin:2px 0 0 0;
+  padding: 0;
+  height: 24px;
+  line-height:24px;
+  @include border-right-radius(6px);
+  outline:none;
+  @include  box-shadow(none);
+  &:focus{
+    outline:none;
+    @include  box-shadow(none);
+  }
+}
+// Large
+.sdpagination-large {
+  @include pagination-size(44px,11px,19px,$font-size-large,6px);
+  .info{
+    @include info-size(44px,$font-size-large,44px);
+  }
+  span{
+    @include border-right-radius(6px);
+    height:42px;
+  }
+  input{
+    @include input-size(70px,40px,1px,$font-size-large,40px);
+  }
+}
+// Small
+.sdpagination-small {
+  @include pagination-size(25px,2px,10px,$font-size-small,3px);
+  .info{
+    @include info-size(26px,$font-size-small,26px);
+  }
+  span{
+    height:24px;
+  }
+  input{
+    @include input-size(40px,20px,2px,$font-size-small,20px);
+  }
+}
+//蓝色皮肤
+@include skin("blue",#4d90fe, #f5f5f5,#fff, #4d90fe);
+//绿色皮肤
+@include skin("green",#3cc051, #f5f5f5,#fff, #3cc051);
+//橙色皮肤
+@include skin("orange",#ff7a06, #f5f5f5,#fff, #ff7a06);
+//红色皮肤
+@include skin("red",#ff3b1b, #f5f5f5,#fff, #ff3b1b);
