@@ -16,6 +16,7 @@ from public.Common import Utils, LoggingUtils
 
 
 class BaseOperate:
+
     '''
     根据excel进行点击，填值等操作
     excel_list:[{'a': 'asd'}, {'s': 1}]
@@ -24,6 +25,7 @@ class BaseOperate:
     def operate(self, excel_list):
         global driver
         try:
+            # 开启日志
             LoggingUtils.debug(excel_list)
             driver = Utils().getDriver()
             LoggingUtils.info('执行' + excel_list[0]['business'])

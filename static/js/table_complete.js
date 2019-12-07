@@ -2,6 +2,7 @@ $(function () {
 
     var total_num = 0;
     default_init();
+    // window.setInterval("default_init()",1000);
     run();
     Init();
     submit();
@@ -53,9 +54,9 @@ $(function () {
                     '                                                <button id="copy" type="button" class="am-btn am-btn-default am-btn-xs "><span\n' +
                     '                                                        class="am-icon-copy"></span> 复制\n' +
                     '                                                </button>\n' +
-                    '                                                <button type="button" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only active">\n' +
-                    '                                                    <span class="am-icon-trash-o"></span> 删除\n' +
-                    '                                                </button>\n' +
+                    // '                                                <button type="button" class="am-btn am-btn-default am-btn-xs am-text-danger am-hide-sm-only active">\n' +
+                    // '                                                    <span class="am-icon-trash-o"></span> 删除\n' +
+                    // '                                                </button>\n' +
                     '                                               <button type="button" class="am-btn am-btn-default am-btn-xs am-text-success am-hide-sm-only active" id="run_btn">\n' +
                     '                                                    <span class="glyphicon glyphicon-triangle-right"></span> 运行\n' +
                     '                                               </button>\n' +
@@ -132,6 +133,8 @@ $(function () {
                     '                                                           </div>\n' +
                     '                                                           <div class="modal-footer">\n' +
                     '                                                               <button id="edit_close" type="button" class="btn btn-default" data-dismiss="modal">关闭\n' +
+                    '                                                               </button>\n' +
+                    '                                                               <button id="edit_add" type="button" class="btn btn-info" style="background-color: #31b0d5; border-color: #269abc;;color: #fff" name="submit" data-toggle="button">添加\n' +
                     '                                                               </button>\n' +
                     '                                                               <button id="edit_paste" type="button" class="btn btn-info" style="background-color: #31b0d5; border-color: #269abc;;color: #fff" name="submit" data-toggle="button" >粘贴\n' +
                     '                                                               </button>\n' +
@@ -291,6 +294,11 @@ $(function () {
     });
 });
 
+// 删除以后实现
+// $('#delete').click(function () {
+//
+// })
+
 //提交业务流数
 function submit() {
 
@@ -382,7 +390,7 @@ function default_init() {
             copy();
             //给执行结果加颜色
             $('td:contains("Fail")').css('color', 'red');
-            $('td:contains("Success")').css('color', 'red');
+            $('td:contains("Success")').css('color', 'green');
         }
     });
 
@@ -394,7 +402,9 @@ function default_init() {
 function run() {
 
     $('[id=run_btn]').each(function () {
+        var td;
         $(this).click(function () {
+            td = $(this).parents('tr').find('td').filter('#result')
             $(this).parents('tr').find('td').filter('#result').css('color', 'black');
             $(this).parents('tr').find('td').filter('#result').text('loading');
             // var business = $(this).parents("tr").find("a").filter("#business").text();
@@ -421,6 +431,8 @@ function run() {
                         $("td:contains('loading')").text('Fail');
                         $("td:contains('Fail')").css('color', 'red');
                     }
+                    // <a href="">查看</a>
+                    td.append('<a href="'+data['report_path']+'"><span> </span>查看</a>');
                     console.log(data['result'])
 
                 }
@@ -486,7 +498,7 @@ function Init() {
                             copy();
                             //给执行结果加颜色
                             $('td:contains("Fail")').css('color', 'red');
-                            $('td:contains("Success")').css('color', 'red');
+                            $('td:contains("Success")').css('color', 'green');
 
                         }
                     })
@@ -508,6 +520,7 @@ function edit() {
     //点击编辑
     $('[id=edit]').each(function () {
         var tr_tbody;
+        // var list;
         $(this).click(function () {
             code1 = $(this).parents('tr').find('td').first().find('input').eq(1).val();
             code = {'code': code1};
@@ -516,6 +529,7 @@ function edit() {
             console.log('tr_tbody', tr_tbody);
             //根据code查询business_detail数据
             $.ajax({
+                // async: false,
                 type: 'POST',
                 url: '/edit',
                 data: JSON.stringify(code),//将对象打包成json的字符串发送，对应后面也要将字符串解码成字典
@@ -568,30 +582,38 @@ function edit() {
                     tr_tbody.find('tr').remove();
                     // var tr_tbody = $(this).parent().find('tbody');
                     //为每个tr赋值
-                    console.log('list', list);
+                    // console.log('list', list);
                     for (var i = 0; i < list.length; i++) {
-                        console.log(list[i]["operate"], i);
-                        // console.log($(tr_tbody).find('input[name="business"]'));
+                        // console.log(list[i]["operate"], i);
                         tr_tbody.append($tr);
                         tr_tbody.find('input[name="business"]').eq(i).val(list[i]['business']);
                         tr_tbody.find('input[name="url"]').eq(i).val(list[i]['url']);
+                        tr_tbody.find('select[name="operate"]').eq(i).find('option').filter(function () {
+                            return $(this).text() === list[i]["operate"];
+                        }).attr("selected", true);
+                        tr_tbody.find('select[name="find_type"]').eq(i).find('option').filter(function () {
+                            return $(this).text() === list[i]["find_type"];
+                        }).attr("selected", true);
                         tr_tbody.find('input[name="element"]').eq(i).val(list[i]['element']);
                         tr_tbody.find('input[name="content"]').eq(i).val(list[i]['content']);
                         tr_tbody.find('input[name="wait_time"]').eq(i).val(list[i]['wait_time']);
                         tr_tbody.find('input[name="operate_info"]').eq(i).val(list[i]['operate_info']);
-                        $('.modal.fade.in tbody').find('select[name="operate"]').eq(i).find('option').filter(function () {
-                            return $(this).text() === list[i]["operate"];
-                        }).attr("selected", true);
-                        $('.modal.fade.in tbody').find('select[name="find_type"]').eq(i).find('option').filter(function () {
-                            return $(this).text() === list[i]["find_type"];
-                        }).attr("selected", true);
+
 
                     }
+                    $('.modal.fade.in tbody').find('select[name="operate"]').eq(0).find('option').filter(function () {
+                            return $(this).text() === list[i]["operate"];
+                        }).attr("selected", true);
 
 
                 }
 
             });
+            //编辑之后添加
+            $(tr_tbody).parents('div').filter('.modal-content').find('.modal-footer').find('#edit_add').click(function () {
+                $(tr_tbody).append($tr);
+            });
+
             //编辑之后提交
             // console.log('test', tr_tbody.parents('div').filter('.modal-content').find('.modal-footer').find('#submit_edit'))
             $(tr_tbody).parents('div').filter('.modal-content').find('.modal-footer').find('#submit_edit').click(function () {
@@ -613,7 +635,7 @@ function edit() {
                         'url': url,
                         'operate': operate,
                         'find_type': find_type,
-                        'element': element,
+                        'element': element.replace(new RegExp('"', "gm"), '\"'),
                         'content': content1,
                         'wait_time': wait_time,
                         'operate_info': operate_info
@@ -624,7 +646,7 @@ function edit() {
                 page_now = parseInt($("#PageIndex").val());
                 //要发送的字典，在JavaScript里被定义为对象
                 mdffilepath = {
-                    'business_detail': arr,
+                    'form_data': arr,
                     'code': code1,
                     'page_now': page_now
 
@@ -695,11 +717,11 @@ function copy() {
         var list;
         $(this).click(function () {
 
-            console.log('copy');
+            // console.log('copy');
             code1 = $(this).parents('tr').find('td').first().find('input').eq(1).val();
             code = {'code': code1};
             tr_tbody = $(this).parent().find('tbody');
-            console.log('tr_tbody', tr_tbody);
+            // console.log('tr_tbody', tr_tbody);
             $.ajax({
                 type: 'POST',
                 async: false,  //改成同步就可以把ajax获取的值赋值给外部变量
@@ -714,7 +736,8 @@ function copy() {
                 }
 
             });
-            console.log(list);
+            // console.log(list);
+            // 粘贴
             $('[id=edit_paste]').each(function () {
                 $tr = '<tr>\n' +
                     '                                                                       <td>\n' +
@@ -757,7 +780,7 @@ function copy() {
                     '                                                                           <input type="text" class="form-control" name="operate_info" placeholder="">\n' +
                     '                                                                       </td>\n' +
                     '                                                                   </tr>';
-                // var tr_tbody = $(this).parent().find('tbody');
+
                 //追加tr在后面,并为每个tr赋值
                 $(this).click(function () {
                     previous_tr = $('.modal.fade.in tbody').find('tr').length;

@@ -12,6 +12,7 @@ import time
 from flask import Flask, render_template, request, redirect, url_for
 from public.BaseOperate import BaseOperate
 from public.Db import Db
+from public.UnittestCase import UnittestCase
 
 app = Flask(__name__)
 # time获取当前时间戳
@@ -65,18 +66,22 @@ def init_get():
 
 @app.route('/table_complete_add/ajax', methods=['POST'])
 def table_complete_add():
-    global str
+    # global str
     a = request.get_data()  # 得到JavaScript发送的字符串流
-    print(a.decode())
-    print(type(a.decode()))
+    # print(a.decode())
+    # print(type(a.decode()))
     form_data = json.loads(a)['form_data']
 
     db = Db(host='localhost', port=3306, user='root', password='root', db='platform_db')
 
-    print('INSERT into business (code, user, business, updatetime, project, business_detail, result) VALUES("{}", "从页面获取用户", "{}", "{}", "{}", "{}", "未执行")'.format(
-            now, form_data[0]["business"], otherStyleTime, "以后会加二级菜单做项目分类直接获取", a.decode()[13: -1].replace('"', "'").replace(r"\'", r'\"'), '未执行'))
-    db.insert('INSERT into business (code, user, business, updatetime, project, business_detail, result) VALUES("{}", "从页面获取用户", "{}", "{}", "{}", "{}", "未执行")'.format(
-            now, form_data[0]["business"], otherStyleTime, "以后会加二级菜单做项目分类直接获取", a.decode()[13: -1].replace('"', "'").replace(r"\'", r'\"'), '未执行'))
+    print(
+        'INSERT into business (code, user, business, updatetime, project, business_detail, result) VALUES("{}", "从页面获取用户", "{}", "{}", "{}", "{}", "未执行")'.format(
+            now, form_data[0]["business"], otherStyleTime, "以后会加二级菜单做项目分类直接获取",
+            a.decode()[13: -1].replace('"', "'").replace(r"\'", r'\"'), '未执行'))
+    db.insert(
+        'INSERT into business (code, user, business, updatetime, project, business_detail, result) VALUES("{}", "从页面获取用户", "{}", "{}", "{}", "{}", "未执行")'.format(
+            now, form_data[0]["business"], otherStyleTime, "以后会加二级菜单做项目分类直接获取",
+            a.decode()[13: -1].replace('"', "'").replace(r"\'", r'\"'), '未执行'))
     list = db.read_many("select * from business order by id desc")
     db.close()
     return {'list': list}  # AJAX接收字典
@@ -102,15 +107,17 @@ def run():
     sqlform_data = db.read_one(
         "select * from business where code='{}'".format(form_data['code']))
     db.update('update business set updatetime="{}" where code="{}"'.format(otherStyleTime, form_data['code']))
-
-    bool = BaseOperate().operate(ast.literal_eval(sqlform_data['business_detail']))
-    if bool == True:
+    data_list = ast.literal_eval(sqlform_data['business_detail'])
+    with open('testData.txt', 'w', encoding='utf8') as f:
+        f.write(str(data_list))
+    # bool = BaseOperate().operate(data_list)
+    result = UnittestCase().main_run()  #返回report地址和bool
+    if result[1] == True:
         db.update("update business set result='{}' where code='{}'".format('Success', form_data['code']))
     else:
         db.update("update business set result='{}' where code='{}'".format('Fail', form_data['code']))
     db.close()
-    # 可以加个检查运行结束返回一个success，然后弹出alert
-    return {'result': bool}
+    return {'result': result[1], 'report_path': result[0]}
 
 
 # 编辑提交
@@ -118,11 +125,13 @@ def run():
 def edit():
     a = request.get_data()  # 得到JavaScript发送的字符串流
     form_data = json.loads(a)  # 将bytes变成dict
+    byte_data = bytes(str(form_data['form_data']), encoding='utf8')
     db = Db(host='localhost', port=3306, user='root', password='root', db='platform_db')
-
+    print('update business set business="{}", business_detail="{}" WHERE code="{}"'.format(
+        form_data['form_data'][0]['business'], byte_data.decode().replace('"', r'\"'), form_data['code']))
     db.update(
         'update business set business="{}", business_detail="{}" WHERE code="{}"'.format(
-            form_data['business_detail'][0]['business'], form_data['business_detail'], form_data['code']))
+            form_data['form_data'][0]['business'], byte_data.decode().replace('"', r'\"'), form_data['code']))
     pageno = (int(form_data['page_now']) - 1) * 10  # 将bytes变成dict,计算第pageno页显示的索引
     list = db.read_many("select * from business order by id desc limit " + str(pageno) + ",10")
     db.close()
@@ -138,7 +147,9 @@ def edit_sub():
     list = db.read_one(
         "select * from business where code='{}'".format(form_data['code']))
     db.close()
-    return {'list': ast.literal_eval(list['business_detail'])}
+    # print(list['business_detail'])
+    # print(list['business_detail'].replace('\\', ''))
+    return {'list': eval(list['business_detail'].replace('\\', ''))}
 
 
 @app.route('/index')

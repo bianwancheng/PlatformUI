@@ -3,7 +3,7 @@
 <head>
     <meta charset="utf-8"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>后台模板</title>
+    <title>UI自动化测试平台</title>
     <link href="../static/js/jquery-sdpagination.js/dist/sdpagination.min.css" rel="stylesheet"/>
     <link rel="stylesheet" href="../static/css/amazeui.css"/>
     <!--    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.3.0/css/font-awesome.min.css">-->
@@ -25,7 +25,7 @@
 <!-- Begin page -->
 <header class="am-topbar am-topbar-fixed-top">
     <div class="am-topbar-left am-hide-sm-only">
-        <a href="index.html" class="logo"><span>Admin<span>to</span></span><i class="zmdi zmdi-layers"></i></a>
+        <a href="index" class="logo"><span>UI自动化测试平台</span><i class="zmdi zmdi-layers"></i></a>
     </div>
 
     <div class="contain">
@@ -34,15 +34,15 @@
             <li><h4 class="page-title" id="task_list">任务列表</h4></li>
         </ul>
 
-        <ul class="am-nav am-navbar-nav am-navbar-right">
-            <li class="inform"><i class="am-icon-bell-o" aria-hidden="true"></i></li>
-            <li class="hidden-xs am-hide-sm-only">
-                <form role="search" class="app-search">
-                    <input type="text" placeholder="Search..." class="form-control">
-                    <a href=""><img src="../static/img/search.png"></a>
-                </form>
-            </li>
-        </ul>
+<!--        <ul class="am-nav am-navbar-nav am-navbar-right">-->
+<!--            <li class="inform"><i class="am-icon-bell-o" aria-hidden="true"></i></li>-->
+<!--            <li class="hidden-xs am-hide-sm-only">-->
+<!--                <form role="search" class="app-search">-->
+<!--                    <input type="text" placeholder="Search..." class="form-control">-->
+<!--                    <a href=""><img src="../static/img/search.png"></a>-->
+<!--                </form>-->
+<!--            </li>-->
+<!--        </ul>-->
     </div>
 </header>
 <!-- end page -->
@@ -50,60 +50,43 @@
 
 <div class="admin">
 
-    <div class="admin-sidebar am-offcanvas  am-padding-0" id="admin-offcanvas">
+    <div class="admin-sidebar am-offcanvas  am-padding-0" style="z-index:0" id="admin-offcanvas">
         <div class="am-offcanvas-bar admin-offcanvas-bar">
             <!-- User -->
-            <div class="user-box am-hide-sm-only">
-                <div class="user-img">
-                    <img src="../static/img/avatar-1.jpg" alt="user-img" title="Mat Helme"
-                         class="img-circle img-thumbnail img-responsive">
-                    <div class="user-status offline"><i class="am-icon-dot-circle-o" aria-hidden="true"></i></div>
-                </div>
-                <h5><a href="#">Mat Helme</a></h5>
-                <ul class="list-inline">
-                    <li>
-                        <a href="#">
-                            <i class="fa fa-cog" aria-hidden="true"></i>
-                        </a>
-                    </li>
+<!--            <div class="user-box am-hide-sm-only">-->
+<!--                <div class="user-img">-->
+<!--                    <img src="../static/img/avatar-1.jpg" alt="user-img" title="Mat Helme"-->
+<!--                         class="img-circle img-thumbnail img-responsive">-->
+<!--                    <div class="user-status offline"><i class="am-icon-dot-circle-o" aria-hidden="true"></i></div>-->
+<!--                </div>-->
+<!--                <h5><a href="#">Mat Helme</a></h5>-->
+<!--                <ul class="list-inline">-->
+<!--                    <li>-->
+<!--                        <a href="#">-->
+<!--                            <i class="fa fa-cog" aria-hidden="true"></i>-->
+<!--                        </a>-->
+<!--                    </li>-->
 
-                    <li>
-                        <a href="#" class="text-custom">
-                            <i class="fa fa-cog" aria-hidden="true"></i>
-                        </a>
-                    </li>
-                </ul>
-            </div>
+<!--                    <li>-->
+<!--                        <a href="#" class="text-custom">-->
+<!--                            <i class="fa fa-cog" aria-hidden="true"></i>-->
+<!--                        </a>-->
+<!--                    </li>-->
+<!--                </ul>-->
+<!--            </div>-->
             <!-- End User -->
 
             <ul class="am-list admin-sidebar-list">
                 <li><a href="index"><span class="am-icon-home"></span> 首页</a></li>
                 <li class="admin-parent">
                     <a class="am-cf" data-am-collapse="{target: '#collapse-nav1'}"><span class="am-icon-table"></span>
-                        表格 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
+                        任务 <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
                     <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav1">
-                        <li><a href="table_basic.html" class="am-cf"> 基本表格</span></a></li>
+<!--                        <li><a href="table_basic.html" class="am-cf"> 基本表格</span></a></li>-->
                         <li><a href="table_complete">任务列表</a></li>
                     </ul>
                 </li>
-                <li class="admin-parent">
-                    <a class="am-cf" data-am-collapse="{target: '#collapse-nav2'}"><i class="am-icon-line-chart"
-                                                                                      aria-hidden="true"></i> 统计图表 <span
-                            class="am-icon-angle-right am-fr am-margin-right"></span></a>
-                    <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav2">
-                        <li><a href="chart_line.html" class="am-cf"> 折线图</span></a></li>
-                        <li><a href="chart_columnar.html" class="am-cf"> 柱状图</span></a></li>
-                        <li><a href="chart_pie.html" class="am-cf"> 饼状图</span></a></li>
-                    </ul>
-                </li>
-                <li class="admin-parent">
-                    <a class="am-cf" data-am-collapse="{target: '#collapse-nav5'}"><span class="am-icon-file"></span> 表单
-                        <span class="am-icon-angle-right am-fr am-margin-right"></span></a>
-                    <ul class="am-list am-collapse admin-sidebar-sub am-in" id="collapse-nav5">
-                        <li><a href="form_basic.html" class="am-cf"> 基本表单</a></li>
-                        <li><a href="form_validate.html">表单验证</a></li>
-                    </ul>
-                </li>
+
             </ul>
         </div>
     </div>
@@ -270,9 +253,14 @@
                                                 <button type="button" class="btn btn-default" data-dismiss="" name="add"
                                                         id="add">添加
                                                 </button>
-                                                <button type="button" class="btn btn-default" data-dismiss=""
-                                                        name="delete">删除
-                                                </button>
+<!--                                                粘贴以后实现-->
+<!--                                                <button id="edit_paste" type="button" class="btn btn-default" data-dismiss=""-->
+<!--                                                        name="paste">粘贴-->
+<!--                                                </button>-->
+<!--                                                删除以后实现-->
+<!--                                                <button id="delete" type="button" class="btn btn-default" data-dismiss=""-->
+<!--                                                        name="delete">删除-->
+<!--                                                </button>-->
                                                 <button type="button" class="btn btn-primary" data-dismiss="modal"
                                                         name="submit" id="submit">提交
                                                 </button>
@@ -280,24 +268,23 @@
                                         </div><!-- /.modal-content -->
                                     </div><!-- /.modal -->
                                 </div>
-<!--                                <button type="button" class="am-btn am-btn-default"><span class="am-icon-save"></span>-->
-<!--                                    保存-->
+<!--                                    以后实现-->
+<!--                                <button type="button" class="am-btn am-btn-default"><span-->
+<!--                                        class="glyphicon glyphicon-triangle-right"></span> 运行-->
 <!--                                </button>-->
-                                <button type="button" class="am-btn am-btn-default"><span
-                                        class="glyphicon glyphicon-triangle-right"></span> 运行
-                                </button>
-                                <button type="button" class="am-btn am-btn-default"><span
-                                        class="am-icon-trash-o"></span> 删除
-                                </button>
+<!--                                <button type="button" class="am-btn am-btn-default"><span-->
+<!--                                        class="am-icon-trash-o"></span> 删除-->
+<!--                                </button>-->
                             </div>
                         </div>
                     </div>
 
                     <div class="am-u-sm-12 am-u-md-3">
                         <div class="am-input-group am-input-group-sm">
-                            <input type="text" class="am-form-field">
-                            <span class="am-input-group-btn">
-				            <button class="am-btn am-btn-default" type="button">搜索</button>
+<!--                            <input type="text" class="am-form-field">-->
+<!--                            <span class="am-input-group-btn">-->
+<!--                                搜索以后实现-->
+<!--				            <button class="am-btn am-btn-default" type="button">搜索</button>-->
 				          </span>
                         </div>
                     </div>
