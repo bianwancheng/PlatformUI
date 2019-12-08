@@ -1,7 +1,7 @@
-#!/usr/bin/env python 
-# -*- coding: utf-8 -*- 
-# @Time : 2019/11/19 11:38 
-# @Author : Wancheng.b 
+#!/usr/bin/env python
+# -*- coding: utf-8 -*-
+# @Time : 2019/11/19 11:38
+# @Author : Wancheng.b
 # @File : Common.py
 # @Software: PyCharm
 
@@ -55,7 +55,7 @@ class Utils:
         self.find_element_byloc(driver, locator).send_keys(content)
 
     def element_get_text(self, driver, locator):
-        return self.find_element_byloc(driver, locator).text()
+        return self.find_element_byloc(driver, locator).text
 
     def switch_new_handles(self, driver):
         # 获取所有的窗口，句柄

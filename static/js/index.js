@@ -3,6 +3,26 @@ $(function () {
     var chart = null;
 // 获取 CSV 数据并初始化图表
     $.getJSON('/get', function (csv) {
+        var Success_sum =0;
+        var Fail_sum = 0;
+        var Pending_sum = 0;
+        for(var j=0; j<csv.length; j++){
+            Success_sum = Success_sum + csv[j]['Success'];
+            Fail_sum = Fail_sum + csv[j]['Fail'];
+            Pending_sum = Pending_sum + csv[j]['Pending'];
+        }
+        total_sum = Success_sum+Fail_sum+Pending_sum;
+        Success_percent = Math.round(Success_sum / total_sum * 10000) / 100.00 + "%";
+        Fail_percent = Math.round(Fail_sum / total_sum * 10000) / 100.00 + "%";
+        $('.widget-detail-1 h2').text(total_sum);
+        $('#widget-detail-2').find('span').text(Success_percent);
+        $('#widget-detail-2').find('h2').text(Success_sum);
+        $('#widget-box-2 .am-progress-bar').css('width', Success_percent);
+        $('#widget-box-3 span').text(Math.round(Fail_sum / total_sum * 10000) / 100.00 + "%");
+        $('#widget-box-3 h2').text(Fail_sum);
+        $('#widget-box-3 .am-progress-bar').css('width', Fail_percent);
+        $('.widget-detail-4 h2').text(Pending_sum);
+
         // csv格式：Day,Success（个）,Fail（个）,Loading(个)
         console.log(csv);
         var data = 'Day,'+'Fail,'+'Success,'+'Pending(未执行)'+'\n';
@@ -103,5 +123,7 @@ $(function () {
             }
         });
     });
+
+
 
 });

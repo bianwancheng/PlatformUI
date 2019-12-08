@@ -61,27 +61,27 @@ class BaseOperate:
 
                 elif operate == 'check_text':
                     LoggingUtils.info(operate_info)
-                    actual_res = Utils().element_get_text(driver, (find_type, element))
-                    if actual_res == content:
+                    actual_ret = Utils().element_get_text(driver, (find_type, element))
+                    if actual_ret == content:
                         LoggingUtils.debug(operate_info + 'success')
                     else:
                         LoggingUtils.debug(operate_info + 'fail')
-                        break
+                        # break
 
                 elif operate == 'check_element_notNone':
                     # 用于检查是否进入某个页面
                     LoggingUtils.info(operate_info)
-                    actual_res = Utils().find_element_byloc(driver, (find_type, element))
-                    if actual_res != content:
+                    actual_ret = Utils().find_element_byloc(driver, (find_type, element))
+                    if actual_ret != content:
                         LoggingUtils.debug(operate_info + 'success')
                     else:
                         LoggingUtils.debug(operate_info + 'fail')
-                        break
+                        # break
 
                 elif operate == None or operate == '':
                     LoggingUtils.warn('此行operate为空流程结束')
                     # 页面填表单会传入None
-                    break
+                    # break
                 else:
                     LoggingUtils.warn('没有此操作请添加，或检查excel的"operate"值是否书写错误')
 

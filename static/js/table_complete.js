@@ -79,12 +79,12 @@ $(function () {
                     '                                                                   <tr>\n' +
                     '                                                                       <th>业务名称</th>\n' +
                     '                                                                       <th>登录地址</th>\n' +
+                    '                                                                       <th>操作说明</th>\n' +
                     '                                                                       <th>操作方式</th>\n' +
                     '                                                                       <th>获取方式</th>\n' +
                     '                                                                       <th>元素取值</th>\n' +
                     '                                                                       <th>输入内容</th>\n' +
                     '                                                                       <th>等待时间</th>\n' +
-                    '                                                                       <th>操作说明</th>\n' +
                     '                                                                   </tr>\n' +
                     '                                                                   </thead>\n' +
                     '                                                                   <tbody id="edit_form" >\n' +
@@ -102,8 +102,9 @@ $(function () {
                     '                                                                                   <option value="option3">send_keys</option>' +
                     '                                                                                   <option value="option4">switch_iframe</option>' +
                     '                                                                                   <option value="option5">switch_default</option>' +
-                    '                                                                                   <option value="option6">check_text</option>' +
-                    '                                                                                   <option value="option7">check_notNone</option>' +
+                    '                                                                                   <option value="option6">switch_new_handles</option>' +
+                    '                                                                                   <option value="option7">check_text</option>' +
+                    '                                                                                   <option value="option8">check_notNone</option>' +
                     '                                                                               </select>' +
                     '                                                                       </td>\n' +
                     '                                                                       <td>\n' +
@@ -134,8 +135,8 @@ $(function () {
                     '                                                           <div class="modal-footer">\n' +
                     '                                                               <button id="edit_close" type="button" class="btn btn-default" data-dismiss="modal">关闭\n' +
                     '                                                               </button>\n' +
-                    '                                                               <button id="edit_add" type="button" class="btn btn-info" style="background-color: #31b0d5; border-color: #269abc;;color: #fff" name="submit" data-toggle="button">添加\n' +
-                    '                                                               </button>\n' +
+                    // '                                                               <button id="edit_add" type="button" class="btn btn-info" style="background-color: #31b0d5; border-color: #269abc;;color: #fff" name="submit" data-toggle="button">添加\n' +
+                    // '                                                               </button>\n' +
                     '                                                               <button id="edit_insert" type="text" class="btn btn-info" style="background-color: #31b0d5; border-color: #269abc;;color: #fff" data-toggle="button">插入\n' +
                     '                                                               </button>\n' +
                     '                                                               <button id="edit_delete" type="button" class="btn btn-info" style="background-color: #31b0d5; border-color: #269abc;;color: #fff" name="submit" data-toggle="button">删除\n' +
@@ -177,7 +178,7 @@ $(function () {
 
 
     //添加添加业务信息的添加按钮，点击添加一条form标签标签
-    $('#add').bind('click', function () {
+    $('#add').off('click').on('click', function () {
         var $form = '<form class="form-horizontal" role="form">\n' +
             '                                                        <div class="row">\n' +
             '                                                            <div class="col-md-6" style="padding-right: 0">\n' +
@@ -218,8 +219,9 @@ $(function () {
             '                                                                                <option value="option3">send_keys</option>\n' +
             '                                                                                <option value="option4">switch_iframe</option>\n' +
             '                                                                                <option value="option5">switch_default</option>\n' +
-            '                                                                                <option value="option6">check_text</option>\n' +
-            '                                                                                <option value="option7">check_notNone</option>\n' +
+            '                                                                                <option value="option6">switch_new_handles</option>' +
+            '                                                                                <option value="option7">check_text</option>' +
+            '                                                                                <option value="option8">check_notNone</option>' +
             '                                                                            </select>\n' +
             '                                                                        </div>\n' +
             '                                                                    </div>\n' +
@@ -572,14 +574,18 @@ function edit() {
                         '                                                                           <input type="text" class="form-control" name="url" placeholder="">\n' +
                         '                                                                       </td>\n' +
                         '                                                                       <td>\n' +
+                        '                                                                           <input type="text" class="form-control" name="operate_info" placeholder="">\n' +
+                        '                                                                       </td>\n' +
+                        '                                                                       <td>\n' +
                         '                                                                               <select class="form-control" name="operate">\n' +
                         '                                                                                   <option value="option1"></option>\n' +
                         '                                                                                   <option value="option2">click</option>\n' +
                         '                                                                                   <option value="option3">send_keys</option>\n' +
                         '                                                                                   <option value="option4">switch_iframe</option>\n' +
                         '                                                                                   <option value="option5">switch_default</option>\n' +
-                        '                                                                                   <option value="option6">check_text</option>\n' +
-                        '                                                                                   <option value="option7">check_notNone</option>\n' +
+                        '                                                                                   <option value="option6">switch_new_handles</option>' +
+                        '                                                                                   <option value="option7">check_text</option>' +
+                        '                                                                                   <option value="option8">check_notNone</option>' +
                         '                                                                               </select>\n' +
                         '                                                                       </td>\n' +
                         '                                                                       <td>\n' +
@@ -599,9 +605,6 @@ function edit() {
                         '                                                                       </td>\n' +
                         '                                                                       <td>\n' +
                         '                                                                           <input type="text" class="form-control" name="wait_time" placeholder="">\n' +
-                        '                                                                       </td>\n' +
-                        '                                                                       <td>\n' +
-                        '                                                                           <input type="text" class="form-control" name="operate_info" placeholder="">\n' +
                         '                                                                       </td>\n' +
                         '                                                                   </tr>';
                     //默认会加载一个tr
@@ -630,7 +633,7 @@ function edit() {
                     var edit_tr = $('[id=edit_tr]');
                     edit_tr.each(function () {
                         $(this).off('click').on('click', function () {
-                             console.log('waibu');
+                            console.log('waibu');
                             console.log(edit_tr.length);
                             if (!$(this).is('.tr_active')) {
 
@@ -669,20 +672,22 @@ function edit() {
                     //删除一行
                     $(tr_tbody).parents('div').find('.modal-content').find('.modal-footer').find('#edit_delete').off('click').on('click', function () {
                         $('.tr_active').remove();
-                    })
+                    });
 
-                    // $('.modal.fade.in tbody').find('select[name="operate"]').eq(0).find('option').filter(function () {
-                    //     return $(this).text() === list[i]["operate"];
-                    // }).attr("selected", true);
-
+                    //编辑之后添加
+                    $(tr_tbody).parents('div').filter('.modal-content').find('.modal-footer').find('#edit_add').off('click').on('click', function () {
+                        $(tr_tbody).append($tr);
+                        edit_tr = $('[id=edit_tr]');
+                    });
 
                 }
 
+
             });
-            //编辑之后添加
-            $(tr_tbody).parents('div').filter('.modal-content').find('.modal-footer').find('#edit_add').click(function () {
-                $(tr_tbody).append($tr);
-            });
+            // //编辑之后添加
+            // $(tr_tbody).parents('div').filter('.modal-content').find('.modal-footer').find('#edit_add').off('click').on('click', function () {
+            //     $(tr_tbody).append($tr);
+            // });
 
             //编辑之后提交
             // console.log('test', tr_tbody.parents('div').filter('.modal-content').find('.modal-footer').find('#submit_edit'))
@@ -844,8 +849,9 @@ function copy() {
                     '                                                                                   <option value="option3">send_keys</option>\n' +
                     '                                                                                   <option value="option4">switch_iframe</option>\n' +
                     '                                                                                   <option value="option5">switch_default</option>\n' +
-                    '                                                                                   <option value="option6">check_text</option>\n' +
-                    '                                                                                   <option value="option7">check_notNone</option>\n' +
+                    '                                                                                   <option value="option6">switch_new_handles</option>' +
+                    '                                                                                   <option value="option7">check_text</option>' +
+                    '                                                                                   <option value="option8">check_notNone</option>' +
                     '                                                                               </select>\n' +
                     '                                                                       </td>\n' +
                     '                                                                       <td>\n' +
