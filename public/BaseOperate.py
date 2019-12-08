@@ -78,25 +78,27 @@ class BaseOperate:
                         LoggingUtils.debug(operate_info + 'fail')
                         break
 
-                elif operate == None:
-                    LoggingUtils.warn('operate为空流程结束')
+                elif operate == None or operate == '':
+                    LoggingUtils.warn('此行operate为空流程结束')
                     # 页面填表单会传入None
                     break
                 else:
                     LoggingUtils.warn('没有此操作请添加，或检查excel的"operate"值是否书写错误')
 
-                if wait_time is not '':
+                if wait_time is not '' and wait_time is not None:
                     LoggingUtils.info('等待' + str(wait_time) + 's')
                     driver.implicitly_wait(30)
                     time.sleep(int(wait_time))
             driver.quit()
             LoggingUtils.info('流程结束，success')
-            return True
-        except Exception as e:
-            # print(repr(e))
+        finally:
             driver.quit()
-            raise e
-            # return False
+        #     return True
+        # except Exception as e:
+        #     print(repr(e))
+        #     driver.quit()
+        #     # raise e
+        #     return False
 
 
 if __name__ == '__main__':

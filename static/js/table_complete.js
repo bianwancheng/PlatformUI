@@ -136,10 +136,14 @@ $(function () {
                     '                                                               </button>\n' +
                     '                                                               <button id="edit_add" type="button" class="btn btn-info" style="background-color: #31b0d5; border-color: #269abc;;color: #fff" name="submit" data-toggle="button">添加\n' +
                     '                                                               </button>\n' +
+                    '                                                               <button id="edit_insert" type="text" class="btn btn-info" style="background-color: #31b0d5; border-color: #269abc;;color: #fff" data-toggle="button">插入\n' +
+                    '                                                               </button>\n' +
+                    '                                                               <button id="edit_delete" type="button" class="btn btn-info" style="background-color: #31b0d5; border-color: #269abc;;color: #fff" name="submit" data-toggle="button">删除\n' +
+                    '                                                               </button>\n' +
                     '                                                               <button id="edit_paste" type="button" class="btn btn-info" style="background-color: #31b0d5; border-color: #269abc;;color: #fff" name="submit" data-toggle="button" >粘贴\n' +
                     '                                                               </button>\n' +
                     '                                                               <button id="submit_edit" data-dismiss="modal" type="button" style="background-color: #337ab7; border-color: #2e6da4;color: #fff" name="submit" data-toggle="button" class="btn btn-default">\n' +
-                    '                                                                   提交\n' +
+                    '                                                                   保存\n' +
                     '                                                               </button>\n' +
                     '                                                           </div>\n' +
                     '                                                       </div><!-- /.modal-content -->\n' +
@@ -382,8 +386,6 @@ function default_init() {
             count = form_data['data_count'];
             $.common.fenye(count);
             //第一页
-            //默认进来的时候会不会有问题？
-
             $.common.pageli(list, parseInt($("#PageIndex").val()));
             run();
             edit();
@@ -391,6 +393,14 @@ function default_init() {
             //给执行结果加颜色
             $('td:contains("Fail")').css('color', 'red');
             $('td:contains("Success")').css('color', 'green');
+            console.log('list', list);
+            // 如果list['report']不为'未执行'就显示查看和对应路径
+            for (var i = 0; i < list.length; i++) {
+
+                if (list[i]['result'] != '未执行') {
+                    $('#tbody').children().eq(i).find('td').last().append('<a href="report/' + list[i]['report'] + '"><span> </span>查看</a>')
+                }
+            }
         }
     });
 
@@ -404,7 +414,7 @@ function run() {
     $('[id=run_btn]').each(function () {
         var td;
         $(this).click(function () {
-            td = $(this).parents('tr').find('td').filter('#result')
+            td = $(this).parents('tr').find('td').filter('#result');
             $(this).parents('tr').find('td').filter('#result').css('color', 'black');
             $(this).parents('tr').find('td').filter('#result').text('loading');
             // var business = $(this).parents("tr").find("a").filter("#business").text();
@@ -424,6 +434,8 @@ function run() {
                 success: function (data) {
                     // 这里加一些返回结果，成功怎么显示，失败怎么显示。可以再页面加一个运行进行时loading（点击运行就会出现loading），直到成功success或者失败fail改变状态
                     bool = data['result'];
+                    report_path = data['report_path'];
+
                     if (bool === true) {
                         $("td:contains('loading')").text('Success');
                         $("td:contains('Success')").css('color', 'green');
@@ -431,9 +443,13 @@ function run() {
                         $("td:contains('loading')").text('Fail');
                         $("td:contains('Fail')").css('color', 'red');
                     }
-                    // <a href="">查看</a>
-                    td.append('<a href="'+data['report_path']+'"><span> </span>查看</a>');
-                    console.log(data['result'])
+                    //执行前没有a标签就append，否则就值改变a标签的href
+                    console.log('td', $(td).find('a').length);
+                    if ($(td).find('a').length === 0) {
+                        td.append('<a href="report/' + report_path + '"><span> </span>查看</a>');
+                    } else {
+                        $(td).find('a').attr('href', 'report/' + report_path);
+                    }
 
                 }
             });
@@ -499,6 +515,13 @@ function Init() {
                             //给执行结果加颜色
                             $('td:contains("Fail")').css('color', 'red');
                             $('td:contains("Success")').css('color', 'green');
+                            // 如果list['report']不为'未执行'就显示查看和对应路径
+                            for (var i = 0; i < list.length; i++) {
+
+                                if (list[i]['result'] != '未执行') {
+                                    $('#tbody').children().eq(i).find('td').last().append('<a href="../report/' + list[i]['report'] + '"><span> </span>查看</a>')
+                                }
+                            }
 
                         }
                     })
@@ -514,19 +537,22 @@ function Init() {
 
 }
 
+
 //编辑按钮
 function edit() {
 
     //点击编辑
     $('[id=edit]').each(function () {
+
         var tr_tbody;
         // var list;
         $(this).click(function () {
+
             code1 = $(this).parents('tr').find('td').first().find('input').eq(1).val();
             code = {'code': code1};
             console.log('code', code);
             tr_tbody = $(this).parent().find('tbody');
-            console.log('tr_tbody', tr_tbody);
+            // console.log('tr_tbody', tr_tbody);
             //根据code查询business_detail数据
             $.ajax({
                 // async: false,
@@ -538,7 +564,7 @@ function edit() {
                 success: function (data) {
                     var list = data['list'];
 
-                    $tr = '<tr>\n' +
+                    $tr = '<tr id="edit_tr">\n' +
                         '                                                                       <td>\n' +
                         '                                                                           <input type="text" class="form-control" name="business" placeholder="">\n' +
                         '                                                                       </td>\n' +
@@ -599,11 +625,55 @@ function edit() {
                         tr_tbody.find('input[name="wait_time"]').eq(i).val(list[i]['wait_time']);
                         tr_tbody.find('input[name="operate_info"]').eq(i).val(list[i]['operate_info']);
 
-
                     }
-                    $('.modal.fade.in tbody').find('select[name="operate"]').eq(0).find('option').filter(function () {
-                            return $(this).text() === list[i]["operate"];
-                        }).attr("selected", true);
+                    //编辑框选中行
+                    var edit_tr = $('[id=edit_tr]');
+                    edit_tr.each(function () {
+                        $(this).off('click').on('click', function () {
+                             console.log('waibu');
+                            console.log(edit_tr.length);
+                            if (!$(this).is('.tr_active')) {
+
+                                $(this).addClass('tr_active');
+                                edit_tr = $('[id=edit_tr]');
+                            } else {
+                                $(this).removeClass('tr_active');
+                                edit_tr = $('[id=edit_tr]');
+                            }
+                            // $(this).toggleClass('tr_active');
+                        })
+
+                    });
+                    // 插入一行,var edit_tr添加之后tr会变所以外部要定义一个变量
+                    $(tr_tbody).parents('div').find('.modal-content').find('.modal-footer').find('#edit_insert').off('click').on('click', function () {
+                        $('.tr_active').after($tr);
+                        console.log('插入tr增加');
+                        edit_tr = $('[id=edit_tr]');
+                        //编辑框选中行
+                        edit_tr.each(function () {
+                            $(this).off('click').on('click', function () {
+                                console.log('插入选中');
+                                console.log(edit_tr.length);
+                                if (!$(this).is('.tr_active')) {
+                                    $(this).addClass('tr_active');
+                                    edit_tr = $('[id=edit_tr]');
+                                } else {
+                                    $(this).removeClass('tr_active');
+                                    edit_tr = $('[id=edit_tr]');
+                                }
+                            })
+
+                        });
+
+                    });
+                    //删除一行
+                    $(tr_tbody).parents('div').find('.modal-content').find('.modal-footer').find('#edit_delete').off('click').on('click', function () {
+                        $('.tr_active').remove();
+                    })
+
+                    // $('.modal.fade.in tbody').find('select[name="operate"]').eq(0).find('option').filter(function () {
+                    //     return $(this).text() === list[i]["operate"];
+                    // }).attr("selected", true);
 
 
                 }
@@ -617,6 +687,10 @@ function edit() {
             //编辑之后提交
             // console.log('test', tr_tbody.parents('div').filter('.modal-content').find('.modal-footer').find('#submit_edit'))
             $(tr_tbody).parents('div').filter('.modal-content').find('.modal-footer').find('#submit_edit').click(function () {
+                // //移出所有tr_active类
+                // $('[id=edit_tr]').each(function () {
+                //     $(this).remove('tr_active')
+                // });
 
                 var formData = $(tr_tbody).find('tr');
                 var arr = [];
@@ -692,22 +766,29 @@ function edit() {
 
 
     });
+
     //编辑页面的关闭按钮
     $('#edit_close').click(function () {
         var tr_tbody = $(this).parent().find('tbody');
         $(tr_tbody).find('tr').each(function () {
-            $(this).remove();
-        });
-    });
-    //叉号按钮
-    $('#edit_chahao').click(function () {
-        var tr_tbody = $(this).parent().find('tbody');
-        $(tr_tbody).find('tr').each(function () {
+            // $(this).removeClass('tr_active');
             $(this).remove();
         });
     });
 
+    //叉号按钮
+    $('#edit_chahao').click(function () {
+        var tr_tbody = $(this).parent().find('tbody');
+        $(tr_tbody).find('tr').each(function () {
+            // $(this).removeClass('tr_active');
+            $(this).remove();
+        });
+
+    });
+
+
 }
+
 
 //复制按钮
 function copy() {

@@ -12,12 +12,10 @@ from HTMLTestRunner import HTMLTestRunner
 
 from public.BaseOperate import BaseOperate
 
+
 projectpath = os.path.dirname(os.path.dirname(os.path.realpath(__file__)))
-with open(projectpath + '/testData.txt', 'r', encoding='utf8')as f:
-    data_list = f.readlines()
-    data_list = eval(data_list[0])
-    print(type(data_list))
-    print(data_list)
+
+
 
 
 class UnittestCase(unittest.TestCase):
@@ -28,22 +26,35 @@ class UnittestCase(unittest.TestCase):
 
     def test_case(self):
         print('进入test_case')
+        with open(projectpath + '/testData.txt', 'r', encoding='utf8')as f:
+            data_list = f.readlines()
+            data_list = eval(data_list[0])
+            print(type(data_list))
+            print(data_list)
         BaseOperate().operate(data_list)
 
     def main_run(self):
         report_path = ''
         try:
+            with open(projectpath + '/testData.txt', 'r', encoding='utf8')as f:
+                data_list = f.readlines()
+                data_list = eval(data_list[0])
+
             title = data_list[0]['business']
             suite = unittest.TestSuite()
             suite.addTest(UnittestCase('test_case'))
             title_time = title + time.strftime('%Y%m%d%H%M%S')
-            fp = open(projectpath + '\\report\\' + title_time + '.html', "wb")
+            fp = open(projectpath + '\\templates\\report\\' + title_time + '.html', "wb")
             runner = HTMLTestRunner(stream=fp, title='测试报告-添加商品综合业务流', description='-添加商品综合业务流')
-            runner.run(suite)
+            ret = runner.run(suite)
             fp.close()
-            report_path = 'http://localhost:63342/PlatformUI/report/'+title_time+ '.html'
+            report_path = title_time + '.html'
             print(report_path)
-            return report_path, True
+            # BaseOperate().operate(data_list)报异常的时候捕获不到异常不知道为什么暂时用ret.error_count, ret.failure_count作为返回依据
+            if ret.error_count==0 and ret.failure_count==0:
+                return report_path, True
+            else:
+                return report_path, False
         except:
             print(report_path)
             return report_path, False
@@ -52,4 +63,5 @@ class UnittestCase(unittest.TestCase):
 if __name__ == '__main__':
     print(projectpath)
     # unittest.main()
-    UnittestCase().main_run()
+    ret = UnittestCase().main_run()
+    print(ret)

@@ -15,10 +15,6 @@ from public.Db import Db
 from public.UnittestCase import UnittestCase
 
 app = Flask(__name__)
-# time获取当前时间戳
-now = int(time.time())  # 1533952277
-timeArray = time.localtime(now)
-otherStyleTime = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
 
 
 # Object of type Decimal is not JSON serializable 解决办法
@@ -66,6 +62,10 @@ def init_get():
 
 @app.route('/table_complete_add/ajax', methods=['POST'])
 def table_complete_add():
+    # time获取当前时间戳
+    now = int(time.time())  # 1533952277
+    timeArray = time.localtime(now)
+    otherStyleTime = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
     # global str
     a = request.get_data()  # 得到JavaScript发送的字符串流
     # print(a.decode())
@@ -101,6 +101,10 @@ def page():
 # 运行
 @app.route('/run', methods=['POST'])
 def run():
+    # time获取当前时间戳
+    now = int(time.time())  # 1533952277
+    timeArray = time.localtime(now)
+    otherStyleTime = time.strftime("%Y-%m-%d %H:%M:%S", timeArray)
     a = request.get_data()  # 得到JavaScript发送的字符串流
     form_data = json.loads(a)  # 将bytes变成dict
     db = Db(host='localhost', port=3306, user='root', password='root', db='platform_db')
@@ -113,11 +117,15 @@ def run():
     # bool = BaseOperate().operate(data_list)
     result = UnittestCase().main_run()  #返回report地址和bool
     if result[1] == True:
-        db.update("update business set result='{}' where code='{}'".format('Success', form_data['code']))
+        db.update("update business set result='{}', report='{}' where code='{}'".format('Success', result[0], form_data['code']))
     else:
-        db.update("update business set result='{}' where code='{}'".format('Fail', form_data['code']))
+        db.update("update business set result='{}', report='{}' where code='{}'".format('Fail', result[0], form_data['code']))
     db.close()
     return {'result': result[1], 'report_path': result[0]}
+
+@app.route('/report/<url>')
+def report(url):
+    return render_template('/report/'+url)
 
 
 # 编辑提交
@@ -147,8 +155,8 @@ def edit_sub():
     list = db.read_one(
         "select * from business where code='{}'".format(form_data['code']))
     db.close()
-    # print(list['business_detail'])
-    # print(list['business_detail'].replace('\\', ''))
+    print(list['business_detail'])
+    print(list['business_detail'].replace('\\', ''))
     return {'list': eval(list['business_detail'].replace('\\', ''))}
 
 
